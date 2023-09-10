@@ -59,32 +59,34 @@ describe("querySelector", () => {
   });
 
   test("should find elements with compound tag, class and id selector", () => {
-    expect(
-      querySelector(
-        documentWith(
-          <div>
-            <p id="find-not-this" className="my-not-target-class"></p>
-            <p id="find-this" className="my-not-target-class"></p>
-            <p id="find-this" className="my-target-class"></p>
-            <span id="find-not-this" className="my-not-target-class"></span>
-            <span id="find-this" className="my-not-target-class"></span>
-            <span id="find-not-this" className="my-target-class"></span>
-            <span
-              id="find-this"
-              className="my-target-class"
-              data-extra="3"
-            ></span>
-            <span
-              id="find-this"
-              className="my-target-class"
-              data-extra="2"
-            ></span>
-          </div>
-        ),
-        "span.my-target-class#find-this"
-      )
-    ).toMatchObject(
+    const dom = documentWith(
+      <div>
+        <p id="find-not-this" className="my-not-target-class"></p>
+        <p id="find-this" className="my-not-target-class"></p>
+        <p id="find-this" className="my-target-class"></p>
+        <span id="find-not-this" className="my-not-target-class"></span>
+        <span id="find-this" className="my-not-target-class"></span>
+        <span id="find-not-this" className="my-target-class"></span>
+        <span id="find-this" className="my-target-class" data-extra="3"></span>
+        <span id="find-this" className="my-target-class" data-extra="2"></span>
+        <span
+          id="find-this"
+          className="my-target-class my-multi-class"
+          data-extra="3"
+        ></span>
+      </div>
+    );
+    expect(querySelector(dom, "span.my-target-class#find-this")).toMatchObject(
       <span id="find-this" className="my-target-class" data-extra="3"></span>
+    );
+    expect(
+      querySelector(dom, "span.my-target-class.my-multi-class#find-this")
+    ).toMatchObject(
+      <span
+        id="find-this"
+        className="my-target-class my-multi-class"
+        data-extra="3"
+      ></span>
     );
   });
 });
