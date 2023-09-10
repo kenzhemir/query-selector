@@ -37,6 +37,22 @@ describe("querySelector", () => {
       )
     ).toMatchObject(<span id="find-this" className="my-target-class"></span>);
   });
+
+  test("should find elements by their id", () => {
+    expect(
+      querySelector(
+        documentWith(
+          <div>
+            <span id="find-not-this" className="my-class"></span>
+            <span id="find-not-this" className="my-other-class"></span>
+            <span id="find-this" className="my-target-class"></span>
+            <span id="find-this" className="my-non-target-class"></span>
+          </div>
+        ),
+        "#find-this"
+      )
+    ).toMatchObject(<span id="find-this" className="my-target-class"></span>);
+  });
 });
 
 const documentWith = (bodyContent: React.JSX.Element) => (
