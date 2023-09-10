@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import React from "react";
-import { querySelector } from "./index.js";
+import { querySelector } from "./index";
 
 describe("querySelector", () => {
   test("should find elements by their name", () => {
@@ -56,6 +56,36 @@ describe("querySelector", () => {
 
   test("should find first element when using *", () => {
     expect(querySelector(documentWith(), "*")).toMatchObject(documentWith());
+  });
+
+  test("should find elements with compound tag, class and id selector", () => {
+    expect(
+      querySelector(
+        documentWith(
+          <div>
+            <p id="find-not-this" className="my-not-target-class"></p>
+            <p id="find-this" className="my-not-target-class"></p>
+            <p id="find-this" className="my-target-class"></p>
+            <span id="find-not-this" className="my-not-target-class"></span>
+            <span id="find-this" className="my-not-target-class"></span>
+            <span id="find-not-this" className="my-target-class"></span>
+            <span
+              id="find-this"
+              className="my-target-class"
+              data-extra="3"
+            ></span>
+            <span
+              id="find-this"
+              className="my-target-class"
+              data-extra="2"
+            ></span>
+          </div>
+        ),
+        "span.my-target-class#find-this"
+      )
+    ).toMatchObject(
+      <span id="find-this" className="my-target-class" data-extra="3"></span>
+    );
   });
 });
 
