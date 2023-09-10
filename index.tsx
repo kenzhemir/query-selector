@@ -4,6 +4,9 @@ export function querySelector(
   dom: React.JSX.Element,
   querySelector: string
 ): React.JSX.Element | undefined {
+  if (querySelector.startsWith("*")) {
+    return dom;
+  }
   if (querySelector.startsWith("#")) {
     const elementId = querySelector.substring(1);
     return findFirstInstance(hasId.bind(undefined, elementId), dom);

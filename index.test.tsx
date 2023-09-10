@@ -53,9 +53,13 @@ describe("querySelector", () => {
       )
     ).toMatchObject(<span id="find-this" className="my-target-class"></span>);
   });
+
+  test("should find first element when using *", () => {
+    expect(querySelector(documentWith(), "*")).toMatchObject(documentWith());
+  });
 });
 
-const documentWith = (bodyContent: React.JSX.Element) => (
+const documentWith = (bodyContent?: React.JSX.Element) => (
   <html lang="en">
     <head>
       <meta charSet="UTF-8" />
