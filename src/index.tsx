@@ -1,6 +1,7 @@
 import React, { isValidElement } from "react";
 import { tokenize } from "./tokenizer";
 import { isSubarray } from "./utils/array-utils";
+import { curry } from "./utils/curry";
 import { any, combineFilters } from "./utils/filters";
 
 export function querySelector(
@@ -13,14 +14,10 @@ export function querySelector(
 
   const tokens = tokenize(querySelector);
 
-  const nameFilter = tokens.name ? hasType.bind(undefined, tokens.name) : any;
-  const classFilter = tokens.classNames.length
-    ? hasClasses.bind(undefined, tokens.classNames)
-    : any;
-
-  const idFilter = tokens.ids.length ? hasIds.bind(undefined, tokens.ids) : any;
-
-  const elementFilter = combineFilters(nameFilter, classFilter, idFilter);
+  const typeFilter = tokens.type ? curry(hasType, tokens.type) : any;
+  const classFilter = tokens.classes ? curry(hasClasses, tokens.classes) : any;
+  const idFilter = tokens.ids ? curry(hasIds, tokens.ids) : any;
+  const elementFilter = combineFilters(typeFilter, classFilter, idFilter);
 
   return findFirstInstance(elementFilter, dom);
 }
